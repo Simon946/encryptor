@@ -26,7 +26,7 @@ Any file type can be used. Note that a larger key file is harder to crack, but t
 With Ceasar encryption, you go byte per byte over the input file. For every byte, you add the value of the key. To decrypt, you subtract the key from the encrypted file. This type of encryption is very easy to crack, because there can only be 256 different keys and each byte is encoded with the same key.
 </p>
 
-<h2>How does Vigenere encryption work?<h2>
+<h2>How does Vigenere encryption work?</h2>
   <p>
     Vigenere is comparable with the Ceasar encryption, except that the key changes for every byte. Instead of applying one key to all the bytes, a keyfile is used where the bytes in the file are used for encryption and decryption. The first byte in the input is encrypted with the first byte of the keyfile, the second byte in the input is encrypted with the second byte of the keyfile and so on. When the input file is larger than the keyfile, the keyfile is repeated. This reduces safety because it means that some bytes are encrypted with the same values at a fixed distance. To solve this, the key file should be the same size or longer than the input file.
   </p>
