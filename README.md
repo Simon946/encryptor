@@ -16,7 +16,8 @@ Let's say you have a input.txt file that you want to encrypt using the ceasar ci
 <br>
 <p>You can do something similar using the vigenere cipher:
 <code>./encryptor vigenere decrypt encrypted.docx plain.docx keyfile.mp4</code>
-  But this time, choose a file as the key instead of a single ASCII character. Make sure that this file is kept secret.
+  But this time, choose a file as the key instead of a single ASCII character. Make sure that this file is kept secret. 
+  Alongside a file, you could also use any integer value between 0 and 2^64-1.
   </p>
 Any file type can be used. Note that a larger key file is harder to crack, but this is limited to the input file size.
 <br>
