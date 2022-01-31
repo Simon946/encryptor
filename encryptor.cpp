@@ -1,30 +1,51 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <random>
 
 void vigenere(std::string keyFileName, std::ifstream &inputFile, std::ofstream &outputFile, bool encrypt){
+    unsigned long long keySeed = 0;
+    bool useGenerator = false;
+    
     std::ifstream keyFile;
-    keyFile.open(keyFileName, std::ios::binary);
+    keyFile.open(keyFileName.c_str(), std::ios::binary);
+
     if (keyFile.fail()){
-        std::cerr << "cannot open keyfile: " << keyFileName << std::endl;
-        return;
+        keySeed = strtoull(keyFileName.c_str(), NULL, 10);
+
+        if(keySeed == 0){
+            std::cerr << "cannot open keyfile: " << keyFileName << std::endl;
+            std::cerr << "Enter a valid keyfile or a valid number" << std::endl;
+            return;
+        }
+        useGenerator = true;
     }
+
+    std::mt19937 key(keySeed);
+
     u_int8_t keyValue = 0;
     char inputValue = 0;
     int encodedBytes = 0;
     int index = 0;
     while (inputFile.read(&inputValue, 1)){
-        if(!(keyFile >> keyValue)){
-            keyFile.clear(); //reset EOF flag
-            keyFile.seekg(0);
-            keyFile >> keyValue;
+
+        if(useGenerator){
+            keyValue = key() % 255;
         }
+        else{
+            if(!(keyFile >> keyValue)){
+                keyFile.clear(); //reset EOF flag
+                keyFile.seekg(0);
+                keyFile >> keyValue;
+            }
+        }
+        
         u_int8_t outputValue = (encrypt)? inputValue + keyValue: inputValue - keyValue;
         outputFile << outputValue;
         encodedBytes++;
     }
-    std::cout << "Encoded: " << encodedBytes << " bytes" << std::endl;
-    keyFile.close();
+    (encrypt)? std::cout <<  "Encrypted: " : std::cout << "Decrypted: ";
+    std::cout << encodedBytes << " bytes" << std::endl;
 }
 
 void ceasar(char key, std::ifstream &inputFile, std::ofstream &outputFile, bool encrypt){
@@ -36,7 +57,8 @@ void ceasar(char key, std::ifstream &inputFile, std::ofstream &outputFile, bool 
         outputFile << result;
         encodedBytes++;
     }
-    std::cout << "Encoded: " << encodedBytes << " bytes" << std::endl;
+    (encrypt)? std::cout <<  "Encrypted: " : std::cout << "Decrypted: ";
+    std::cout << encodedBytes << " bytes" << std::endl;
 }
 
 int main(int argc, char* argv[]){
